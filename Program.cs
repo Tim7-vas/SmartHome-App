@@ -1,19 +1,29 @@
 ﻿using System.Text;
 using SmartHome.Devices;
 using SmartHome.Services;
-
 Console.OutputEncoding = Encoding.UTF8;
-
+var light = new SmartLight("L1", "Лампа спальня");
+light.ScheduleOn(new TimeSpan(7, 30, 0));
+light.ScheduleOff(new TimeSpan(23, 0, 0));
+var thermostat = new SmartThermostat("T1", "Термостат");
+thermostat.ScheduleOn(new TimeSpan(6, 0, 0));
+var camera = new SmartCamera("C1", "Камера у двери");
+var doorLock = new SmartLock("K1", "Замок входной");
+var fan = new SmartFan("F1", "Вентилятор в гостиной");
 var manager = new DeviceManager();
-manager.Add(new SmartLight("L1", "Лампа спальня"));
-manager.Add(new SmartThermostat("T1", "Термостат"));
-manager.Add(new SmartCamera("C1", "Камера"));
-manager.Add(new SmartLock("K1", "Замок"));
-manager.Add(new SmartFan("F1", "Вентилятор в гостиной"));
-
+manager.Add(light);
+manager.Add(thermostat);
+manager.Add(camera);
+manager.Add(doorLock);
+manager.Add(fan);
 manager.TurnAllOn();
+Console.WriteLine("\n--- Текущие статусы ---");
 manager.PrintAllStatuses();
-
-Console.WriteLine("\n--- Устанавливаем уровень 5 для всех регулируемых устройств ---");
+Console.WriteLine("\n--- Регулировка уровня (устанавливаем 5) ---");
 manager.SetLevelForAllAdjustable(5);
 manager.PrintAllStatuses();
+Console.WriteLine("\n--- Сводка отчётных устройств ---");
+camera.SimulateMotion();
+manager.PrintAllReports();
+manager.PrintScheduledDevices();
+manager.PrintTotalEnergy();

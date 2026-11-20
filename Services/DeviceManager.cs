@@ -44,4 +44,19 @@ Console.WriteLine($"[{d.Name}] Включение: {onStr}, Выключение
 }
 }
 }
+public void PrintTotalEnergy()
+{
+double totalKwh = 0;
+Console.WriteLine("\n--- Потребление электроэнергии ---");
+foreach (var d in _devices)
+{
+if (d is IEnergyConsumer consumer)
+{
+double daily = consumer.CalculateDailyConsumption();
+totalKwh += daily;
+Console.WriteLine($"[{d.Name}] Мощность: {consumer.PowerConsumptionWatt} Вт | Сутки: {daily:F2} кВт·ч");
+}
+}
+Console.WriteLine($"Общее суточное потребление: {totalKwh:F2} кВт·ч");
+}
 }
